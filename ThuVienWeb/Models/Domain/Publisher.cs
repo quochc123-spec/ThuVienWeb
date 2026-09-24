@@ -8,6 +8,6 @@ namespace ThuVienWeb.Models.Domain
         public int Id { get; set; }
         public string? Name { get; set; }
         //navigation property
-        public required List<Books> Books { get; set; }
+        public List<Books> Books { get; set; } = new List<Books>();
     }
 }
