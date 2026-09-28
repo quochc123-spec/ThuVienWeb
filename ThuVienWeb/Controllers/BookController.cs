@@ -26,9 +26,11 @@ namespace ThuVienWeb.Controllers
         }
         //GET: api/Book/get-all-books
         [HttpGet("get-all-books")]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
+            [FromQuery] string? sortBy, [FromQuery] bool isAscending,
+            [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
-            var allBooks = _bookRepository.GetAllBooks();
+            var allBooks = _bookRepository.GetAllBooks(filterOn, filterQuery, sortBy, isAscending, pageNumber, pageSize);
 
             return Ok(allBooks);
         }
@@ -56,8 +58,12 @@ namespace ThuVienWeb.Controllers
         [HttpPut("update-book-by-id/{id:int}")]
         public IActionResult UpdateBookById(int id, [FromBody] AddBookRequestDTO bookDTO)
         {
-            var updateBook = _bookRepository.UpdateBookById(id, bookDTO);
-            return Ok(updateBook);
+        var updateBook = _bookRepository.UpdateBookById(id, bookDTO);
+        if (updateBook == null)
+        {
+            return NotFound();
+        }
+        return Ok(updateBook);
         }
 
         [HttpDelete("delete-book-by-id/{id:int}")]

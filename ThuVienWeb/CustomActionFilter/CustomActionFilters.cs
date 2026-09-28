@@ -7,9 +7,10 @@ namespace ThuVienWeb.CustomActionFilter
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (!context.ModelState.IsValid == false)
+            // If the model state is invalid, short-circuit and return 400 with validation details
+            if (!context.ModelState.IsValid)
             {
-                context.Result = new BadRequestResult();
+                context.Result = new BadRequestObjectResult(context.ModelState);
             }
         }
     }
