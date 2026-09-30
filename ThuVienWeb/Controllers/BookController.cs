@@ -14,6 +14,7 @@ namespace ThuVienWeb.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BookController : ControllerBase
     {
         private readonly AppDbContext _dbContext;
@@ -26,10 +27,12 @@ namespace ThuVienWeb.Controllers
         }
         //GET: api/Book/get-all-books
         [HttpGet("get-all-books")]
+        [Authorize(Roles = "Read")]
         public IActionResult GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
             [FromQuery] string? sortBy, [FromQuery] bool isAscending,
             [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
+      
             var allBooks = _bookRepository.GetAllBooks(filterOn, filterQuery, sortBy, isAscending, pageNumber, pageSize);
 
             return Ok(allBooks);
@@ -37,6 +40,7 @@ namespace ThuVienWeb.Controllers
 
         [HttpGet]
         [Route("get-book-by-id/{id:int}")]
+        [Authorize(Roles = "Read")]
         public IActionResult GetBookById([FromRoute] int id)
         {
             var bookWithIdDTO = _bookRepository.GetBookById(id);
@@ -44,6 +48,7 @@ namespace ThuVienWeb.Controllers
         }
 
         [HttpPost("add-book")]
+        [Authorize(Roles = "Write")]
         [ValidateModel]
         public IActionResult AddBook([FromBody] AddBookRequestDTO addBookRequestDTO)
         {
@@ -56,6 +61,7 @@ namespace ThuVienWeb.Controllers
         }
 
         [HttpPut("update-book-by-id/{id:int}")]
+        [Authorize(Roles = "Write")]
         public IActionResult UpdateBookById(int id, [FromBody] AddBookRequestDTO bookDTO)
         {
         var updateBook = _bookRepository.UpdateBookById(id, bookDTO);
@@ -67,6 +73,7 @@ namespace ThuVienWeb.Controllers
         }
 
         [HttpDelete("delete-book-by-id/{id:int}")]
+        [Authorize(Roles = "Write")]
         public IActionResult DeleteBookById(int id)
         {
             var deleteBook = _bookRepository.DeleteBookById(id);
@@ -78,7 +85,7 @@ namespace ThuVienWeb.Controllers
         {
             if (addBookRequestDTO == null)
             {
-                ModelState.AddModelError(nameof(addBookRequestDTO), $"Please add book data");
+                ModelState.AddModelError(nameof(addBookRequestDTO.Title), $"Please add book data");
                 return false;
             }
             if (string.IsNullOrEmpty(addBookRequestDTO.Description))
