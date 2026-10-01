@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using System.Text.Json;
 using ThuVienWeb.CustomActionFilter;
 using ThuVienWeb.Data;
 using ThuVienWeb.Models.Domain;
@@ -14,33 +15,39 @@ namespace ThuVienWeb.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class BookController : ControllerBase
     {
         private readonly AppDbContext _dbContext;
         private readonly IBookRepository _bookRepository;
 
-        public BookController(AppDbContext dbContext, IBookRepository bookRepository)
+        private readonly ILogger<BookController> _logger;
+        public BookController(AppDbContext dbContext, IBookRepository bookRepository, ILogger<BookController> logger)
         {
             _dbContext = dbContext;
             _bookRepository = bookRepository;
+            _logger = logger;
         }
         //GET: api/Book/get-all-books
         [HttpGet("get-all-books")]
-        [Authorize(Roles = "Read")]
+        //[Authorize(Roles = "Read")]
         public IActionResult GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
             [FromQuery] string? sortBy, [FromQuery] bool isAscending,
             [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
-      
-            var allBooks = _bookRepository.GetAllBooks(filterOn, filterQuery, sortBy, isAscending, pageNumber, pageSize);
+            _logger.LogInformation("GetAll Book Action method was invoked");
+            _logger.LogWarning("This is a warning log");
+            _logger.LogError("This is a error log");
 
+            var allBooks = _bookRepository.GetAllBooks(filterOn, filterQuery, sortBy, isAscending, pageNumber, pageSize);
+            //debug 
+            _logger.LogInformation($"Finished GetAllBook request with data {JsonSerializer.Serialize(allBooks)}");
             return Ok(allBooks);
         }
 
         [HttpGet]
         [Route("get-book-by-id/{id:int}")]
-        [Authorize(Roles = "Read")]
+        //[Authorize(Roles = "Read")]
         public IActionResult GetBookById([FromRoute] int id)
         {
             var bookWithIdDTO = _bookRepository.GetBookById(id);
@@ -48,7 +55,7 @@ namespace ThuVienWeb.Controllers
         }
 
         [HttpPost("add-book")]
-        [Authorize(Roles = "Write")]
+        //[Authorize(Roles = "Write")]
         [ValidateModel]
         public IActionResult AddBook([FromBody] AddBookRequestDTO addBookRequestDTO)
         {
@@ -61,7 +68,7 @@ namespace ThuVienWeb.Controllers
         }
 
         [HttpPut("update-book-by-id/{id:int}")]
-        [Authorize(Roles = "Write")]
+        //[Authorize(Roles = "Write")]
         public IActionResult UpdateBookById(int id, [FromBody] AddBookRequestDTO bookDTO)
         {
         var updateBook = _bookRepository.UpdateBookById(id, bookDTO);
@@ -73,7 +80,7 @@ namespace ThuVienWeb.Controllers
         }
 
         [HttpDelete("delete-book-by-id/{id:int}")]
-        [Authorize(Roles = "Write")]
+        //[Authorize(Roles = "Write")]
         public IActionResult DeleteBookById(int id)
         {
             var deleteBook = _bookRepository.DeleteBookById(id);
