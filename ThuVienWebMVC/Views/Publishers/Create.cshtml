@@ -1,0 +1,9 @@
+@model ThuVienWebMVC.Models.DTO.publisherNoIdDTO
+<h2>Add Publisher</h2>
+<form asp-action="Create" method="post">
+    <label>Name</label>
+    <input asp-for="Name" />
+    <input type="submit" value="Add" class="btn btn-primary" />
+</form>
+
+<a class="btn btn-secondary" asp-controller="Publishers" asp-action="Index">Back to list</a>

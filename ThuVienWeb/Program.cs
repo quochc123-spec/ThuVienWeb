@@ -13,6 +13,32 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", 
+        new OpenApiInfo
+        {
+            Title = "Book API",
+            Version = "v1"
+        });
+    options.AddSecurityDefinition("bearer",
+        new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            Description ="JWT Authorization header using the Bearer scheme."
+        });
+    options.AddSecurityRequirement(document =>
+            new OpenApiSecurityRequirement
+            {
+                [
+                    new OpenApiSecuritySchemeReference(
+                        "bearer",
+                        document)
+                ] = []
+            });
+});
 // Add services to the container. 
 var _logger = new LoggerConfiguration().WriteTo.Console()// ghi ra console 
     .WriteTo.File("Logs/Book_log.txt", rollingInterval: RollingInterval.Minute) //ghi ra file lưu trong thư mục Logs 
@@ -54,19 +80,18 @@ option.Password.RequireDigit = false;// Yêu cầu về password chứa ký số
     option.Password.RequiredLength = 6; 
     option.Password.RequiredUniqueChars = 1;
 });
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
 {
-    options.TokenValidationParameters = new TokenValidationParameters
+    option.TokenValidationParameters = new TokenValidationParameters
     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                        ValidAudience = builder.Configuration["Jwt:Audience"],
-                        ClockSkew = TimeSpan.Zero,
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ClockSkew = TimeSpan.Zero,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
     };
 });
 

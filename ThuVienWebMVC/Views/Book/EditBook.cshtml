@@ -1,0 +1,44 @@
+﻿@model ThuVienWebMVC.Models.DTO.BookDTO
+@{
+    var book = ViewBag.Book;
+    var listAuthor = ViewBag.listAuthor;
+    var listPublisher = ViewBag.listPublisher;
+}
+<h2>Edit Book</h2>
+
+<form asp-controller="Book" asp-action="EditBook" method="POST">
+    <input type="hidden" name="id" value="@book?.Id" />
+    <label>Title</label>
+    <input type="text" name="Title" asp-for="Title" value="@book.Title" /><br />
+    <label>Description</label>
+    <input type="text" name="Description" asp-for="Description" value="@book.Description" /><br />
+    <label>IsRead</label>
+    @if (book.IsRead == true)
+    {
+        <input type="radio" name="IsRead" asp-for="IsRead" value="True" checked /><label for="IsRead">Yes</label>
+        <input type="radio" name="IsRead" asp-for="IsRead" value="False" /><label for="IsRead">No</label><br />
+    }
+    else
+    {
+        <input type="radio" name="IsRead" asp-for="IsRead" value="True" /><label for="IsRead">Yes</label>
+        <input type="radio" name="IsRead" asp-for="IsRead" value="False" checked /><label for="IsRead">No</label><br />
+    }
+    <label>DateRead</label>
+    <input type="date" name="DateRead" asp-for="DateRead" value="@book.DateRead?.ToString("yyyy-MM-dd")" /><br />
+    <label>Rate</label>
+    <input type="number" name="Rate" asp-for="Rate" value="@book.Rate" /><br />
+    <label>Genre</label>
+    <input type="text" name="Genre" asp-for="Genre" value="@book.Genre" /><br />
+    <label>CoverUrl</label>
+    <input type="text" name="CoverUrl" asp-for="CoverUrl" value="@book.CoverUrl" /><br />
+    <label>DateAdded</label>
+    <input type="date" name="DateAdded" asp-for="DateAdded" value="@book.DateAdded.ToString("yyyy-MM-dd")" /><br />
+    <label>Publisher:</label>
+    <span>@book.PublisherName</span><select name="PublisherId">
+        @foreach (var publisher in listPublisher)
+        {
+            <option value="@publisher.Id">@publisher.Name</option>
+        }
+            </select><br />
+    <input type="submit" value="Save" />
+</form>

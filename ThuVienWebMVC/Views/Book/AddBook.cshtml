@@ -1,0 +1,39 @@
+﻿@model ThuVienWebMVC.Models.DTO.addBookDTO
+@{
+    var listAuthor = ViewBag.listAuthor;
+    var listPublisher = ViewBag.listPublisher;
+}
+<form asp-controller="Book" asp-action="AddBook" method="POST">
+    <label>Title</label>
+    <input type="text" name="Title" asp-for="Title" /><span asp-validation-for="Title" class="text-danger"></span><br />
+    <label>Description</label>
+    <input type="text" name="Description" asp-for="Description" /><br />
+    <label>IsRead</label>
+    <input type="radio" name="IsRead" asp-for="IsRead" value="True" /><label for="IsRead">Yes</label>
+    <input type="radio" name="IsRead" asp-for="IsRead" value="False" /><label for="IsRead">No</label><br />
+    <label>DateRead</label>
+    <input type="date" name="DateRead" asp-for="DateRead" /><br />
+    <label>Rate</label>
+    <input type="number" name="Rate" asp-for="Rate" min="1" max="5" /><br />
+    <label>Genre</label>
+    <input type="text" name="Genre" asp-for="Genre" /><br />
+    <label>CoverUrl</label>
+    <input type="text" name="CoverUrl" asp-for="CoverUrl" /><br />
+    <label>DateAdded</label>
+    <input type="date" name="DateAdded" asp-for="DateAdded" /><br />
+    <label>Publisher:</label>
+    <select name="PublisherId">
+        @foreach (var publisher in listPublisher)
+        {
+            <option value="@publisher.Id">@publisher.Name</option>
+        }
+    </select>
+    <label>Author:</label>
+    <select name="AuthorIds" multiple>
+        @foreach (var author in listAuthor)
+        {
+            <option value="@author.Id">@author.Name</option>
+        }
+    </select>
+<input type="submit" value="Add Book" />
+</form>

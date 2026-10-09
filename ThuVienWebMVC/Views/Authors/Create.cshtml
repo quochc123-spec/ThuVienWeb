@@ -1,0 +1,9 @@
+@model ThuVienWebMVC.Models.DTO.authorDTO
+<h2>Add Author</h2>
+<form asp-action="Create" method="post">
+    <label>Full Name</label>
+    <input asp-for="Name" />
+    <input type="submit" value="Add" class="btn btn-primary" />
+</form>
+
+<a class="btn btn-secondary" asp-controller="Authors" asp-action="Index">Back to list</a>

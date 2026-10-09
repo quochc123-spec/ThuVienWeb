@@ -1,0 +1,68 @@
+﻿@model IEnumerable<ThuVienWebMVC.Models.DTO.BookDTO>
+<h2>List of Books</h2>
+<form asp-controller="Books" asp-action="Index" method="get">
+<label>Search: </label>
+<select> name="filterOn" id="filterOn">
+    <option value="Title">Title</option>
+    <option value="Author">Author</option>
+    <option value="Publisher">Publisher</option>
+</select>
+<input type="text" name="filterQuery"/>
+<label>Sort by: </label>
+<select name="sortBy" id="sortBy">
+    <option value="Title">Title</option>
+    <option value="Rate">Rate</option>
+</select>
+<label>Ascending: </label><input type="radio" name="isAscending" value="true"/>
+<label>Descending: </label><input type="radio" name="isAscending" value="false"/>
+<input type="submit" value="Search"/>
+</form>
+
+
+
+
+<a class="btn btn-primary" asp-controller="Book" asp-action="AddBook">Add new book</a>
+<table class="table">
+    <tr>
+        <th>Id code</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Publisher</th>
+        <th>Rating</th>
+        <th>Detail</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Title</td>
+                <td>@foreach (var i in item.AuthorNames)
+                    {
+                        @i
+                        <br />                
+                    }
+                </td>
+                <td>@item.PublisherName </td>
+                <td>
+                    @for (var i = 0; i < item.Rate; i++)
+                    {
+                        <span class="glyphicon glyphicon-star"></span>
+                    }
+                </td>
+                <td><a asp-area="" asp-controller="Book" asp-action="ListBookById" asp-route-id="@item.Id">Detail</a></td>
+                <td><a asp-area="" asp-controller="Book" asp-action="EditBook" asp-route-id="@item.Id">Edit</a></td>
+                <td><a asp-area="" asp-controller="Book" asp-action="DeleteBook" asp-route-id="@item.Id">Delete</a></td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="8">No books found.</td>
+        </tr>
+    }
+</table>

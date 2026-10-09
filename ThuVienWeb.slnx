@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="ThuVienWeb/ThuVienWeb.csproj" />
+  <Project Path="ThuVienWebMVC/ThuVienWebMVC.csproj" Id="4a2e4e48-bfc5-4b13-af0a-57e7a0a63063" />
 </Solution>

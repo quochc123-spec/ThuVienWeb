@@ -80,7 +80,7 @@ namespace ThuVienWeb.Controllers
         }
 
         [HttpDelete("delete-book-by-id/{id:int}")]
-        //[Authorize(Roles = "Write")]
+        [Authorize(Roles = "Write")]
         public IActionResult DeleteBookById(int id)
         {
             var deleteBook = _bookRepository.DeleteBookById(id);

@@ -1,0 +1,42 @@
+﻿@model ThuVienWebMVC.Models.DTO.BookDTO
+<h1>Thông tin sách:</h1>
+<img src="@Model.CoverUrl" alt="Book Cover" style="float: left; margin-right: 10px; width: 200px;" />
+<p>Tên sách: @Model.Title</p>
+<p>Mô tả: @Model.Description</p>
+<p>Thể loại: @Model.Genre</p>
+<p>Ngày đọc: @Model.DateRead</p>
+<p>Is Read?:
+    @if (Model.IsRead==true)
+    {
+        <input type="radio" id="IsRead" name="IsRead" value="yes" checked /><label>Read</label>
+        <input type="radio" id="IsRead" name="IsRead" value="no" /> <label>Not read</label>
+    }
+    else
+    {
+        
+        <input type="radio" id="IsRead" name="IsRead" value="yes" /><label>Read</label>
+        <input type="radio" id="IsRead" name="IsRead" value="no" checked /> <label>Not read</label>
+    }
+</p>
+<p> Review:
+     @if (Model.IsRead == true)
+     {
+        for (var i = 0; i < Model.Rate; i++)
+        {
+            <span class="glyphicon glyphicon-star"></span>
+        }
+      }
+    else
+        {
+              <span>Not read yet</span>  
+        }
+</p>
+<p>Thể loại: @Model.Genre</p>
+<p>Ngày thêm: @Model.DateAdded.ToString("dd/MM/yyyy")</p>
+<p>Nhà xuất bản: @Model.PublisherName</p>
+<p>Tác giả: 
+    @foreach (var author in Model.AuthorNames)
+            {
+                <a href="link-to-author-page">@author</a>
+            }
+</p>

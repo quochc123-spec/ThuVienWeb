@@ -1,0 +1,23 @@
+@model IEnumerable<ThuVienWebMVC.Models.DTO.publisherDTO>
+<h2>Publishers</h2>
+<a class="btn btn-primary" asp-controller="Publishers" asp-action="Create">Add new publisher</a>
+<table class="table">
+    <tr><th>Id</th><th>Name</th><th>Details</th><th>Edit</th><th>Delete</th></tr>
+    @if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td><a asp-controller="Publishers" asp-action="Details" asp-route-id="@item.Id">Details</a></td>
+                <td><a asp-controller="Publishers" asp-action="Edit" asp-route-id="@item.Id">Edit</a></td>
+                <td><a asp-controller="Publishers" asp-action="Delete" asp-route-id="@item.Id">Delete</a></td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr><td colspan="5">No publishers found.</td></tr>
+    }
+</table>
